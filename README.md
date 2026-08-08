@@ -60,7 +60,7 @@ data/              # Local parquet cache (gitignored)
 
 - [x] Phase 0 — Foundation — reproducible `uv` env, CI gate, Docker dev container, and the data pipeline (loader + cache + ticker universe)
 - [x] Phase 1 — Backtest engine + performance metrics (Sharpe, max drawdown, turnover)
-- [ ] Phase 2 — Momentum strategies (time-series + cross-sectional) + runner script
+- [x] Phase 2 — Momentum strategies (time-series + cross-sectional) + runner script
 - [ ] Phase 3 — Mean-reversion + validation discipline: transaction costs, train/test splits, in- vs out-of-sample comparison
 - [ ] Phase 4 — Statistical arbitrage / pairs trading (cointegration, spread z-score)
 - [ ] Phase 5 — Risk modelling: volatility targeting and Monte Carlo VaR / CVaR
