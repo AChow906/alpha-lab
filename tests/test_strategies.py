@@ -1,18 +1,11 @@
 import pandas as pd
 import pytest
 
+from alphalab.strategies.mean_reversion import mean_reversion
 from alphalab.strategies.ts_momentum import ts_momentum
 from alphalab.strategies.xs_momentum import xs_momentum
 
 dates = pd.date_range("2024-01-01", periods=5)
-
-prices = pd.DataFrame(
-    {
-        "A": [100.0, 101.0, 102.0, 103.0, 104.0],
-        "B": [50.0, 49.0, 48.0, 47.0, 46.0],
-    },
-    index=dates,
-)
 
 
 def test_tsmom():
@@ -45,3 +38,15 @@ def test_xsmom():
     assert weights["D"].iloc[3] == pytest.approx(-0.5)
     assert weights["A"].iloc[3] == pytest.approx(0.0)
     assert weights["B"].iloc[3] == pytest.approx(0.0)
+
+
+def test_mean_reversion():
+    prices = pd.DataFrame(
+        {
+            "A": [100.0, 100.0, 100.0, 100.0, 110.0],
+        },
+        index=dates,
+    )
+
+    weights = mean_reversion(prices, lookback=3)
+    assert weights["A"].iloc[4] == pytest.approx(-1)
