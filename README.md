@@ -59,13 +59,14 @@ data/              # Local parquet cache (gitignored)
 ## Roadmap
 
 - [x] Phase 0 — Foundation — reproducible `uv` env, CI gate, Docker dev container, and the data pipeline (loader + cache + ticker universe)
-- [ ] Phase 1 — Backtest engine, performance metrics (Sharpe, max drawdown, turnover), and momentum strategies (time-series + cross-sectional)
-- [ ] Phase 2 — Mean-reversion + validation discipline: transaction costs, train/test splits, in- vs out-of-sample comparison
-- [ ] Phase 3 — Statistical arbitrage / pairs trading (cointegration, spread z-score)
-- [ ] Phase 4 — Risk modelling: volatility targeting and Monte Carlo VaR / CVaR
-- [ ] Phase 5 — Options pricing (Black-Scholes, binomial trees, Greeks) + documentation polish
-- [ ] **Phase 6 — Paper-trading execution** *(stretch)* — the strategy core driven live against the Alpaca **paper** API: a daily scheduled rebalancer, ATR/volatility position sizing, trade + P&L logging, and Discord briefings
-- [ ] **Phase 7 — Live trading** *(stretch, personal use — not a project deliverable)* — the same runner pointed at a funded account; paper-validated strategies only, with hard per-trade stops and a portfolio drawdown circuit-breaker
+- [x] Phase 1 — Backtest engine + performance metrics (Sharpe, max drawdown, turnover)
+- [ ] Phase 2 — Momentum strategies (time-series + cross-sectional) + runner script
+- [ ] Phase 3 — Mean-reversion + validation discipline: transaction costs, train/test splits, in- vs out-of-sample comparison
+- [ ] Phase 4 — Statistical arbitrage / pairs trading (cointegration, spread z-score)
+- [ ] Phase 5 — Risk modelling: volatility targeting and Monte Carlo VaR / CVaR
+- [ ] Phase 6 — Options pricing (Black-Scholes, binomial trees, Greeks) + documentation polish
+- [ ] **Phase 7 — Paper-trading execution** *(stretch)* — the strategy core driven live against the Alpaca **paper** API: a daily scheduled rebalancer, ATR/volatility position sizing, trade + P&L logging, and Discord briefings
+- [ ] **Phase 8 — Live trading** *(stretch, personal use — not a project deliverable)* — the same runner pointed at a funded account; paper-validated strategies only, with hard per-trade stops and a portfolio drawdown circuit-breaker
 
 ### Research discipline
 
@@ -76,16 +77,16 @@ The backtester is designed to avoid the classic ways strategy research lies to y
 - **Realistic costs** — transaction costs and turnover are charged, not ignored.
 - **Honest metrics** — full-sample equity curves and drawdowns, no cherry-picked periods.
 
-### Phases 6–7 — From research to live execution (stretch goals)
+### Phases 7–8 — From research to live execution (stretch goals)
 
-Phases 0–5 build the *research* core; Phases 6–7 add *execution*, on a single principle: a backtester and a trading bot are two drivers of the **same strategy code**. Strategies are pure functions from price history to target positions — the backtest engine feeds them all of history at once; the live runner feeds them the latest bar. Same signals, different driver, so the bot is an adapter rather than a rewrite — and the no-lookahead discipline that keeps the backtest honest is exactly what makes live behaviour match it.
+Phases 0–6 build the *research* core; Phases 7–8 add *execution*, on a single principle: a backtester and a trading bot are two drivers of the **same strategy code**. Strategies are pure functions from price history to target positions — the backtest engine feeds them all of history at once; the live runner feeds them the latest bar. Same signals, different driver, so the bot is an adapter rather than a rewrite — and the no-lookahead discipline that keeps the backtest honest is exactly what makes live behaviour match it.
 
-**Phase 6 — Paper trading.** A daily scheduled job (not a 24/7 loop — daily, equities-only strategies only need to run once at the close): pull the latest bars through `data/loader.py`, compute target weights, reconcile against current positions, and rebalance via the Alpaca **paper** API behind a thin, swappable broker interface. Position sizing reuses the Phase 4 risk module (volatility/ATR-based, constant risk per trade). Trades and daily P&L are logged; a Discord webhook posts a morning/evening briefing. Secrets (API keys, webhook URL) live in a gitignored `.env`.
+**Phase 7 — Paper trading.** A daily scheduled job (not a 24/7 loop — daily, equities-only strategies only need to run once at the close): pull the latest bars through `data/loader.py`, compute target weights, reconcile against current positions, and rebalance via the Alpaca **paper** API behind a thin, swappable broker interface. Position sizing reuses the Phase 5 risk module (volatility/ATR-based, constant risk per trade). Trades and daily P&L are logged; a Discord webhook posts a morning/evening briefing. Secrets (API keys, webhook URL) live in a gitignored `.env`.
 
-**Phase 7 — Live trading.** The identical runner pointed at a funded account, gated behind a successful paper-trading period, with non-negotiable risk limits: a hard stop on every trade, a portfolio-level drawdown circuit-breaker that flattens and halts, and small position sizes. This phase is **personal-use and explicitly not a project deliverable** — it involves real capital and real risk, and nothing in this repository is financial advice.
+**Phase 8 — Live trading.** The identical runner pointed at a funded account, gated behind a successful paper-trading period, with non-negotiable risk limits: a hard stop on every trade, a portfolio-level drawdown circuit-breaker that flattens and halts, and small position sizes. This phase is **personal-use and explicitly not a project deliverable** — it involves real capital and real risk, and nothing in this repository is financial advice.
 
 **One core, three venues.** The same strategy modules can ultimately drive three execution targets: the backtester (historical), Alpaca (real market), and — closing the loop with the companion project — the C++ engine's gateway (a self-hosted venue). Those are precisely the "strategy agents" that engine's Phase 10 anticipates.
 
 ### Scope
 
-Low-latency systems engineering and exchange infrastructure (matching engine, order book, networking) are intentionally **out of scope** — they live in the companion C++ trading-engine project. For the **research core (Phases 0–5)**, service deployment (containers, dashboards, cloud) is also out of scope: reproducibility is handled by the pinned `uv` lockfile and CI on a clean checkout, not runtime infrastructure. The execution **stretch goals (Phases 6–7)** deliberately reintroduce a minimal slice of that — a scheduled runner and secrets management — kept lean by staying daily and equities-only. Live trading (Phase 7) is personal-use, not a deliverable, and nothing here is financial advice.
+Low-latency systems engineering and exchange infrastructure (matching engine, order book, networking) are intentionally **out of scope** — they live in the companion C++ trading-engine project. For the **research core (Phases 0–6)**, service deployment (containers, dashboards, cloud) is also out of scope: reproducibility is handled by the pinned `uv` lockfile and CI on a clean checkout, not runtime infrastructure. The execution **stretch goals (Phases 7–8)** deliberately reintroduce a minimal slice of that — a scheduled runner and secrets management — kept lean by staying daily and equities-only. Live trading (Phase 8) is personal-use, not a deliverable, and nothing here is financial advice.
