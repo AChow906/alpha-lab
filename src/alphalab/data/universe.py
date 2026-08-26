@@ -14,10 +14,25 @@ SECTOR_ETFS: list[str] = [
 
 PAIRS: list[tuple[str, str]] = [
     ("KO", "PEP"),
+    ("PG", "CL"),
+    ("CL", "KMB"),
+    ("WMT", "TGT"),
+    ("MO", "PM"),
     ("MA", "V"),
-    ("HD", "LOW"),
+    ("JPM", "BAC"),
+    ("GS", "MS"),
+    ("WFC", "C"),
+    ("CVX", "XOM"),
     ("XLE", "XOP"),
+    ("COP", "EOG"),
+    ("MSFT", "AAPL"),
+    ("GOOGL", "META"),
+    ("NVDA", "AMD"),
+    ("HD", "LOW"),
+    ("LEN", "DHI"),
     ("GLD", "GDX"),
+    ("GDX", "GDXJ"),
+    ("SPY", "XLK"),
 ]
 
 
