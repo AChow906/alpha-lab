@@ -63,7 +63,7 @@ data/              # Local parquet cache (gitignored)
 - [x] Phase 2 — Momentum strategies (time-series + cross-sectional) + runner script
 - [x] Phase 3 — Mean-reversion + validation discipline: transaction costs, train/test splits, in- vs out-of-sample comparison
 - [x] Phase 4 — Statistical arbitrage / pairs trading (cointegration, spread z-score) with walk-forward pair selection over an expanded universe
-- [ ] Phase 5 — Risk modelling: volatility targeting and Monte Carlo VaR / CVaR
+- [x] Phase 5 — Risk modelling: volatility targeting and Monte Carlo VaR / CVaR
 - [ ] Phase 6 — Options pricing (Black-Scholes, binomial trees, Greeks) + documentation polish
 - [ ] **Phase 7 — Paper-trading execution** *(stretch)* — the strategy core driven live against the Alpaca **paper** API: a daily scheduled rebalancer, ATR/volatility position sizing, trade + P&L logging, and Discord briefings
 - [ ] **Phase 8 — Live trading** *(stretch, personal use — not a project deliverable)* — the same runner pointed at a funded account; paper-validated strategies only, with hard per-trade stops and a portfolio drawdown circuit-breaker
